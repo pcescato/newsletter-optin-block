@@ -6,7 +6,7 @@
  * Version:           1.0.0
  * Author:            Pascal CESCATO
  * Author URI:        https://tsw.ovh/
- * License:           GPL-2.0+
+ * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       newsletter-optin-block
  * Domain Path:       /languages

@@ -94,7 +94,7 @@ add_action( 'admin_init', 'fai_check_dependencies' );
 function fai_dependency_notice() {
     ?>
     <div class="notice notice-warning is-dismissible">
-        <p><?php esc_html_e( 'Le plugin "Formulaire Auto-injecté" nécessite que Contact Form 7 soit installé et activé.', 'formulaire-auto-injecte' ); ?></p>
+        <p><?php esc_html_e( 'Le plugin "Formulaire Auto-injecté" nécessite que Contact Form 7 soit installé et activé.', 'newsletter-optin-block' ); ?></p>
     </div>
     <?php
 }

@@ -10,10 +10,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function fai_add_admin_menu() {
     add_options_page(
-        __( 'Formulaire Auto-injecté', 'formulaire-auto-injecte' ),
-        __( 'Formulaire Auto-injecté', 'formulaire-auto-injecte' ),
+        __( 'Formulaire Auto-injecté', 'newsletter-optin-block' ),
+        __( 'Formulaire Auto-injecté', 'newsletter-optin-block' ),
         'manage_options',
-        'formulaire-auto-injecte',
+        'newsletter-optin-block',
         'fai_options_page_html'
     );
 }
@@ -78,21 +78,21 @@ function fai_options_page_html() {
             ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Activer le plugin', 'formulaire-auto-injecte' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Activer le plugin', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <input type="checkbox" name="fai_settings[fai_activate]" value="1" <?php checked( isset( $options['fai_activate'] ) ? $options['fai_activate'] : 0, 1 ); ?> />
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('API Key', 'formulaire-auto-injecte'); ?></th>
+                    <th scope="row"><?php esc_html_e('API Key', 'newsletter-optin-block'); ?></th>
                     <td><input type="text" name="fai_settings[fai_api_key]" value="<?php echo esc_attr( isset( $options['fai_api_key'] ) ? $options['fai_api_key'] : '' ); ?>"/></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('API Secret', 'formulaire-auto-injecte'); ?></th>
+                    <th scope="row"><?php esc_html_e('API Secret', 'newsletter-optin-block'); ?></th>
                     <td><input type="text" name="fai_settings[fai_api_secret]" value="<?php echo esc_attr( isset( $options['fai_api_secret'] ) ? $options['fai_api_secret'] : '' ); ?>"/></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Liste Mailjet', 'formulaire-auto-injecte'); ?></th>
+                    <th scope="row"><?php esc_html_e('Liste Mailjet', 'newsletter-optin-block'); ?></th>
                     <td>
                         <?php if ( !empty($mailjet_lists) ) : ?>
                             <select name="fai_settings[fai_list_id]">
@@ -108,7 +108,7 @@ function fai_options_page_html() {
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Contact Form 7 Form', 'formulaire-auto-injecte' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Contact Form 7 Form', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <select name="fai_settings[fai_form_id]">
                             <?php
@@ -127,23 +127,23 @@ function fai_options_page_html() {
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Message de remerciement', 'formulaire-auto-injecte' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Message de remerciement', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <textarea name="fai_settings[fai_thank_you_message]" rows="5" cols="50"><?php echo esc_textarea( isset( $options['fai_thank_you_message'] ) ? $options['fai_thank_you_message'] : '' ); ?></textarea>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Seuil d\'insertion (%)', 'formulaire-auto-injecte' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Seuil d\'insertion (%)', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <input type="number" name="fai_settings[fai_injection_threshold]" value="<?php echo esc_attr( isset( $options['fai_injection_threshold'] ) ? $options['fai_injection_threshold'] : '60' ); ?>" min="0" max="100" />
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Mode de découpage', 'formulaire-auto-injecte' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Mode de découpage', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <select name="fai_settings[fai_split_mode]">
-                            <option value="paragraphs" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : 'paragraphs', 'paragraphs' ); ?>><?php esc_html_e( 'Paragraphes', 'formulaire-auto-injecte' ); ?></option>
-                            <option value="words" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : '', 'words' ); ?>><?php esc_html_e( 'Mots', 'formulaire-auto-injecte' ); ?></option>
+                            <option value="paragraphs" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : 'paragraphs', 'paragraphs' ); ?>><?php esc_html_e( 'Paragraphes', 'newsletter-optin-block' ); ?></option>
+                            <option value="words" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : '', 'words' ); ?>><?php esc_html_e( 'Mots', 'newsletter-optin-block' ); ?></option>
                         </select>
                     </td>
                 </tr>

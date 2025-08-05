@@ -22,8 +22,21 @@ add_action( 'admin_menu', 'fai_add_admin_menu' );
 /**
  * Register the settings.
  */
+function fai_sanitize_settings( $input ) {
+    $output = array();
+    $output['fai_activate'] = isset($input['fai_activate']) ? 1 : 0;
+    $output['fai_api_key'] = isset($input['fai_api_key']) ? sanitize_text_field($input['fai_api_key']) : '';
+    $output['fai_api_secret'] = isset($input['fai_api_secret']) ? sanitize_text_field($input['fai_api_secret']) : '';
+    $output['fai_list_id'] = isset($input['fai_list_id']) ? sanitize_text_field($input['fai_list_id']) : '';
+    $output['fai_form_id'] = isset($input['fai_form_id']) ? absint($input['fai_form_id']) : '';
+    $output['fai_thank_you_message'] = isset($input['fai_thank_you_message']) ? wp_kses_post($input['fai_thank_you_message']) : '';
+    $output['fai_injection_threshold'] = isset($input['fai_injection_threshold']) ? min(100, max(0, intval($input['fai_injection_threshold']))) : 60;
+    $output['fai_split_mode'] = isset($input['fai_split_mode']) && in_array($input['fai_split_mode'], array('paragraphs','words')) ? $input['fai_split_mode'] : 'paragraphs';
+    return $output;
+}
+
 function fai_register_settings() {
-    register_setting( 'fai_settings', 'fai_settings' );
+    register_setting( 'fai_settings', 'fai_settings', 'fai_sanitize_settings' );
 }
 add_action( 'admin_init', 'fai_register_settings' );
 

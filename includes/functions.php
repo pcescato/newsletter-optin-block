@@ -63,39 +63,57 @@ function fai_handle_submission( $contact_form ) {
             $list_id = isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '';
 
             if ( ! empty( $api_key ) && ! empty( $api_secret ) ) {
-                try {
-                    $mj = new \Mailjet\Client( $api_key, $api_secret, true, ['version' => 'v3'] );
-                    // Création du contact (si pas déjà existant)
-                    $body = [
-                        'IsExcludedFromCampaigns' => true,
-                        'Name' => $name,
-                        'Email' => $email
-                    ];
-                    $response = $mj->post( \Mailjet\Resources::$Contact, ['body' => $body] );
-
-                    if ( ! $response->success() && $response->getStatus() != 400 ) { // 400 = contact déjà existant
-                        $fai_mailjet_error_message = $response->getStatus() . ' ' . $response->getReasonPhrase() . ' - ' . json_encode($response->getBody());
+                // Création du contact (si pas déjà existant)
+                $contact_url = 'https://api.mailjet.com/v3/REST/contact';
+                $contact_body = array(
+                    'IsExcludedFromCampaigns' => true,
+                    'Name' => $name,
+                    'Email' => $email
+                );
+                $args = array(
+                    'headers' => array(
+                        'Authorization' => 'Basic ' . base64_encode($api_key . ':' . $api_secret),
+                        'Content-Type' => 'application/json',
+                    ),
+                    'body' => wp_json_encode($contact_body),
+                    'timeout' => 10,
+                    'method' => 'POST',
+                );
+                $response = wp_remote_post($contact_url, $args);
+                if ( is_wp_error($response) ) {
+                    $fai_mailjet_error_message = 'Erreur Mailjet : ' . $response->get_error_message();
+                } else {
+                    $code = wp_remote_retrieve_response_code($response);
+                    if ( $code !== 201 && $code !== 400 ) { // 400 = contact déjà existant
+                        $fai_mailjet_error_message = 'Erreur Mailjet : ' . $code . ' - ' . wp_remote_retrieve_body($response);
                     }
-
-                    // Ajout à la liste si ID fourni
-                    if ( ! empty( $list_id ) ) {
-                        $listResponse = $mj->post(
-                            \Mailjet\Resources::$ContactslistManagecontact,
-                            [
-                                'id' => $list_id,
-                                'body' => [
-                                    'Email' => $email,
-                                    'Name' => $name,
-                                    'Action' => 'addforce'
-                                ]
-                            ]
-                        );
-                        if ( ! $listResponse->success() ) {
-                            $fai_mailjet_error_message = 'Liste: ' . $listResponse->getStatus() . ' ' . $listResponse->getReasonPhrase() . ' - ' . json_encode($listResponse->getBody());
+                }
+                // Ajout à la liste
+                if ( ! empty( $list_id ) ) {
+                    $list_url = 'https://api.mailjet.com/v3/REST/contactslist/' . urlencode($list_id) . '/managecontact';
+                    $list_body = array(
+                        'Email' => $email,
+                        'Name' => $name,
+                        'Action' => 'addforce',
+                    );
+                    $args_list = array(
+                        'headers' => array(
+                            'Authorization' => 'Basic ' . base64_encode($api_key . ':' . $api_secret),
+                            'Content-Type' => 'application/json',
+                        ),
+                        'body' => wp_json_encode($list_body),
+                        'timeout' => 10,
+                        'method' => 'POST',
+                    );
+                    $list_response = wp_remote_post($list_url, $args_list);
+                    if ( is_wp_error($list_response) ) {
+                        $fai_mailjet_error_message = 'Erreur ajout liste Mailjet : ' . $list_response->get_error_message();
+                    } else {
+                        $list_code = wp_remote_retrieve_response_code($list_response);
+                        if ( $list_code !== 201 && $list_code !== 400 ) {
+                            $fai_mailjet_error_message = 'Erreur ajout liste Mailjet : ' . $list_code . ' - ' . wp_remote_retrieve_body($list_response);
                         }
                     }
-                } catch ( \Exception $e ) {
-                    $fai_mailjet_error_message = 'Mailjet Library Exception: ' . $e->getMessage();
                 }
             }
 

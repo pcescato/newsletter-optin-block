@@ -105,7 +105,7 @@ function fai_handle_submission( $contact_form ) {
                 array(
                     'email' => $email,
                     'submission_date' => current_time( 'mysql' ),
-                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                    'ip_address' => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',
                 )
             );
         }

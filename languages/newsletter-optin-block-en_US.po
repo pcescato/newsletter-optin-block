@@ -1,0 +1,44 @@
+msgid "Formulaire Auto-injecté"
+msgstr "Auto-injected Form"
+
+msgid "Activer le plugin"
+msgstr "Enable the plugin"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "API Secret"
+msgstr "API Secret"
+
+msgid "Liste Mailjet"
+msgstr "Mailjet List"
+
+msgid "Contact Form 7 Form"
+msgstr "Contact Form 7 Form"
+
+msgid "Message de remerciement"
+msgstr "Thank you message"
+
+msgid "Seuil d'insertion (%)"
+msgstr "Injection threshold (%)"
+
+msgid "Mode de découpage"
+msgstr "Split mode"
+
+msgid "Paragraphes"
+msgstr "Paragraphs"
+
+msgid "Mots"
+msgstr "Words"
+
+msgid "Newsletter Opt-in Block requires Contact Form 7 to be installed and active. Please install and activate Contact Form 7."
+msgstr "Newsletter Opt-in Block requires Contact Form 7 to be installed and active. Please install and activate Contact Form 7."
+
+msgid "Le plugin \"Formulaire Auto-injecté\" nécessite que Contact Form 7 soit installé et activé."
+msgstr "The \"Auto-injected Form\" plugin requires Contact Form 7 to be installed and active."
+
+msgid "ID de la liste Mailjet"
+msgstr "Mailjet List ID"
+
+msgid "Renseignez vos clés API et enregistrez pour choisir une liste."
+msgstr "Enter your API keys and save to choose a list."

@@ -38,6 +38,7 @@ function fai_options_page_html() {
     $options = get_option( 'fai_settings' );
     // Préparation pour affichage du select des listes Mailjet
     $mailjet_lists = array();
+    $mailjet_error = '';
     $api_key = isset($options['fai_api_key']) ? trim($options['fai_api_key']) : '';
     $api_secret = isset($options['fai_api_secret']) ? trim($options['fai_api_secret']) : '';
     if ( !empty($api_key) && !empty($api_secret) ) {
@@ -52,14 +53,19 @@ function fai_options_page_html() {
                 foreach ($lists as $list) {
                     $mailjet_lists[$list['ID']] = $list['Name'] . ' (ID: ' . $list['ID'] . ')';
                 }
+            } else {
+                $mailjet_error = 'Erreur Mailjet : ' . esc_html($response->getStatus()) . ' ' . esc_html($response->getReasonPhrase());
             }
-        } catch (\Exception $e) {
-            // On ignore l'erreur, le champ sera un input texte fallback
+        } catch (\Throwable $e) {
+            $mailjet_error = 'Erreur Mailjet : ' . esc_html($e->getMessage());
         }
     }
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <?php if ( !empty($mailjet_error) ) : ?>
+            <div class="notice notice-error"><p><?php echo $mailjet_error; ?></p></div>
+        <?php endif; ?>
         <form action="options.php" method="post">
             <?php
             settings_fields( 'fai_settings' );

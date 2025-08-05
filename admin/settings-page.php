@@ -42,22 +42,27 @@ function fai_options_page_html() {
     $api_key = isset($options['fai_api_key']) ? trim($options['fai_api_key']) : '';
     $api_secret = isset($options['fai_api_secret']) ? trim($options['fai_api_secret']) : '';
     if ( !empty($api_key) && !empty($api_secret) ) {
-        try {
-            if ( ! class_exists('Mailjet\\Client') ) {
-                require_once dirname(__FILE__) . '/../vendor/autoload.php';
-            }
-            $mj = new \Mailjet\Client($api_key, $api_secret, true, ['version' => 'v3']);
-            $response = $mj->get(\Mailjet\Resources::$Contactslist, ['limit' => 100]);
-            if ($response->success()) {
-                $lists = $response->getData();
-                foreach ($lists as $list) {
+        $url = 'https://api.mailjet.com/v3/REST/contactslist?limit=100';
+        $args = array(
+            'headers' => array(
+                'Authorization' => 'Basic ' . base64_encode($api_key . ':' . $api_secret),
+            ),
+            'timeout' => 10,
+        );
+        $response = wp_remote_get($url, $args);
+        if ( is_wp_error($response) ) {
+            $mailjet_error = 'Erreur Mailjet : ' . esc_html($response->get_error_message());
+        } else {
+            $code = wp_remote_retrieve_response_code($response);
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+            if ($code == 200 && isset($data['Data'])) {
+                foreach ($data['Data'] as $list) {
                     $mailjet_lists[$list['ID']] = $list['Name'] . ' (ID: ' . $list['ID'] . ')';
                 }
             } else {
-                $mailjet_error = 'Erreur Mailjet : ' . esc_html($response->getStatus()) . ' ' . esc_html($response->getReasonPhrase());
+                $mailjet_error = 'Erreur Mailjet : ' . esc_html($code) . ' ' . (isset($data['ErrorMessage']) ? esc_html($data['ErrorMessage']) : $body);
             }
-        } catch (\Throwable $e) {
-            $mailjet_error = 'Erreur Mailjet : ' . esc_html($e->getMessage());
         }
     }
     ?>

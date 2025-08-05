@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       Formulaire Auto-injecté
- * Plugin URI:        https://example.com/
+ * Plugin Name:       Newsletter Optin Block
+ * Plugin URI:        https://tsw.ovh/
  * Description:       Injecte automatiquement un formulaire Contact Form 7 dans les articles.
  * Version:           1.0.0
- * Author:            Gemini
- * Author URI:        https://gemini.google.com/
+ * Author:            Pascal CESCATO
+ * Author URI:        https://tsw.ovh/
  * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       formulaire-auto-injecte
+ * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
+ * Text Domain:       newsletter-optin-block
  * Domain Path:       /languages
  */
 

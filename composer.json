@@ -1,0 +1,5 @@
+{
+    "require": {
+        "mailjet/mailjet-client": "^1.5"
+    }
+}

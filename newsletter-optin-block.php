@@ -14,7 +14,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
 
 // Load the Mailjet library via autoload.
@@ -37,7 +37,7 @@ add_action( 'admin_init', 'newsletter_optin_block_check_cf7' );
 function newsletter_optin_block_cf7_not_active_notice() {
     ?>
     <div class="notice notice-error is-dismissible">
-        <p><?php _e( 'Newsletter Opt-in Block requires Contact Form 7 to be installed and active. Please install and activate Contact Form 7.', 'newsletter-optin-block' ); ?></p>
+        <p><?php esc_html_e( 'Newsletter Opt-in Block requires Contact Form 7 to be installed and active. Please install and activate Contact Form 7.', 'newsletter-optin-block' ); ?></p>
     </div>
     <?php
 }
@@ -94,7 +94,7 @@ add_action( 'admin_init', 'fai_check_dependencies' );
 function fai_dependency_notice() {
     ?>
     <div class="notice notice-warning is-dismissible">
-        <p><?php _e( 'Le plugin "Formulaire Auto-injecté" nécessite que Contact Form 7 soit installé et activé.', 'formulaire-auto-injecte' ); ?></p>
+        <p><?php esc_html_e( 'Le plugin "Formulaire Auto-injecté" nécessite que Contact Form 7 soit installé et activé.', 'formulaire-auto-injecte' ); ?></p>
     </div>
     <?php
 }

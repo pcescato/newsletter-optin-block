@@ -53,17 +53,19 @@ function fai_handle_submission( $contact_form ) {
 
     if ( $submission ) {
         $posted_data = $submission->get_posted_data();
-        $email = isset( $posted_data['mailjetemail '] ) ? sanitize_email( $posted_data['mailjetemail '] ) : '';
-		$name = isset( $posted_data['mailjetname '] ) ? sanitize_text_field( $posted_data['mailjetname '] ) : '';
+        $email = isset( $posted_data['mailjetemail'] ) ? sanitize_email( $posted_data['mailjetemail'] ) : '';
+        $name = isset( $posted_data['mailjetname'] ) ? sanitize_text_field( $posted_data['mailjetname'] ) : '';
 
         if ( ! empty( $email ) ) {
             $options = get_option( 'fai_settings' );
             $api_key = isset( $options['fai_api_key'] ) ? $options['fai_api_key'] : '';
             $api_secret = isset( $options['fai_api_secret'] ) ? $options['fai_api_secret'] : '';
+            $list_id = isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '';
 
             if ( ! empty( $api_key ) && ! empty( $api_secret ) ) {
                 try {
                     $mj = new \Mailjet\Client( $api_key, $api_secret, true, ['version' => 'v3'] );
+                    // Création du contact (si pas déjà existant)
                     $body = [
                         'IsExcludedFromCampaigns' => true,
                         'Name' => $name,
@@ -71,8 +73,24 @@ function fai_handle_submission( $contact_form ) {
                     ];
                     $response = $mj->post( \Mailjet\Resources::$Contact, ['body' => $body] );
 
-                    if ( ! $response->success() ) {
+                    if ( ! $response->success() && $response->getStatus() != 400 ) { // 400 = contact déjà existant
                         $fai_mailjet_error_message = $response->getStatus() . ' ' . $response->getReasonPhrase() . ' - ' . json_encode($response->getBody());
+                    }
+
+                    // Ajout à la liste si ID fourni
+                    if ( ! empty( $list_id ) ) {
+                        $listBody = [
+                            'Contacts' => [
+                                [
+                                    'Email' => $email,
+                                    'Name' => $name
+                                ]
+                            ]
+                        ];
+                        $listResponse = $mj->post( "contactslist/$list_id/managecontacts", ['body' => $listBody] );
+                        if ( ! $listResponse->success() ) {
+                            $fai_mailjet_error_message = 'Liste: ' . $listResponse->getStatus() . ' ' . $listResponse->getReasonPhrase() . ' - ' . json_encode($listResponse->getBody());
+                        }
                     }
                 } catch ( \Exception $e ) {
                     $fai_mailjet_error_message = 'Mailjet Library Exception: ' . $e->getMessage();

@@ -60,6 +60,10 @@ function fai_options_page_html() {
                     <td><input type="text" name="fai_settings[fai_api_secret]" value="<?php echo esc_attr( isset( $options['fai_api_secret'] ) ? $options['fai_api_secret'] : '' ); ?>"/></td>
                 </tr>
                 <tr valign="top">
+                    <th scope="row">ID de la liste Mailjet</th>
+                    <td><input type="text" name="fai_settings[fai_list_id]" value="<?php echo esc_attr( isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '' ); ?>"/></td>
+                </tr>
+                <tr valign="top">
                     <th scope="row"><?php _e( 'Contact Form 7 Form', 'formulaire-auto-injecte' ); ?></th>
                     <td>
                         <select name="fai_settings[fai_form_id]">

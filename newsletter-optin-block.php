@@ -1,11 +1,10 @@
 <?php
 /**
  * Plugin Name:       Newsletter Optin Block
- * Plugin URI:        https://tsw.ovh/
  * Description:       Injecte automatiquement un formulaire Contact Form 7 dans les articles.
  * Version:           1.0.0
  * Author:            Pascal CESCATO
- * Author URI:        https://tsw.ovh/
+ * Author URI:        https://zone-test.ovh/
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       newsletter-optin-block

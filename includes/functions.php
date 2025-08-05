@@ -79,15 +79,17 @@ function fai_handle_submission( $contact_form ) {
 
                     // Ajout à la liste si ID fourni
                     if ( ! empty( $list_id ) ) {
-                        $listBody = [
-                            'Contacts' => [
-                                [
+                        $listResponse = $mj->post(
+                            \Mailjet\Resources::$ContactslistManagecontact,
+                            [
+                                'id' => $list_id,
+                                'body' => [
                                     'Email' => $email,
-                                    'Name' => $name
+                                    'Name' => $name,
+                                    'Action' => 'addforce'
                                 ]
                             ]
-                        ];
-                        $listResponse = $mj->post( "contactslist/$list_id/managecontacts", ['body' => $listBody] );
+                        );
                         if ( ! $listResponse->success() ) {
                             $fai_mailjet_error_message = 'Liste: ' . $listResponse->getStatus() . ' ' . $listResponse->getReasonPhrase() . ' - ' . json_encode($listResponse->getBody());
                         }

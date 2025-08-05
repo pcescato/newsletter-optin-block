@@ -36,6 +36,27 @@ function fai_options_page_html() {
     }
 
     $options = get_option( 'fai_settings' );
+    // Préparation pour affichage du select des listes Mailjet
+    $mailjet_lists = array();
+    $api_key = isset($options['fai_api_key']) ? trim($options['fai_api_key']) : '';
+    $api_secret = isset($options['fai_api_secret']) ? trim($options['fai_api_secret']) : '';
+    if ( !empty($api_key) && !empty($api_secret) ) {
+        try {
+            if ( ! class_exists('Mailjet\\Client') ) {
+                require_once dirname(__FILE__) . '/../vendor/autoload.php';
+            }
+            $mj = new \Mailjet\Client($api_key, $api_secret, true, ['version' => 'v3']);
+            $response = $mj->get(\Mailjet\Resources::$Contactslist, ['limit' => 100]);
+            if ($response->success()) {
+                $lists = $response->getData();
+                foreach ($lists as $list) {
+                    $mailjet_lists[$list['ID']] = $list['Name'] . ' (ID: ' . $list['ID'] . ')';
+                }
+            }
+        } catch (\Exception $e) {
+            // On ignore l'erreur, le champ sera un input texte fallback
+        }
+    }
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -60,8 +81,20 @@ function fai_options_page_html() {
                     <td><input type="text" name="fai_settings[fai_api_secret]" value="<?php echo esc_attr( isset( $options['fai_api_secret'] ) ? $options['fai_api_secret'] : '' ); ?>"/></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">ID de la liste Mailjet</th>
-                    <td><input type="text" name="fai_settings[fai_list_id]" value="<?php echo esc_attr( isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '' ); ?>"/></td>
+                    <th scope="row">Liste Mailjet</th>
+                    <td>
+                        <?php if ( !empty($mailjet_lists) ) : ?>
+                            <select name="fai_settings[fai_list_id]">
+                                <option value="">-- Sélectionner une liste --</option>
+                                <?php foreach ($mailjet_lists as $id => $label) : ?>
+                                    <option value="<?php echo esc_attr($id); ?>" <?php selected( isset($options['fai_list_id']) ? $options['fai_list_id'] : '', $id ); ?>><?php echo esc_html($label); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php else : ?>
+                            <input type="text" name="fai_settings[fai_list_id]" value="<?php echo esc_attr( isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '' ); ?>" placeholder="ID de la liste Mailjet" />
+                            <br><small>Renseignez vos clés API et enregistrez pour choisir une liste.</small>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <tr valign="top">
                     <th scope="row"><?php _e( 'Contact Form 7 Form', 'formulaire-auto-injecte' ); ?></th>

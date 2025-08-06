@@ -19,27 +19,33 @@ function fai_inject_form( $content ) {
     }
 
     $shortcode = '[contact-form-7 id="' . esc_attr( $form_id ) . '"]';
+    $inject_bottom_short = isset($options['fai_inject_bottom_short']) ? $options['fai_inject_bottom_short'] : 0;
+    $word_count = str_word_count( wp_strip_all_tags( $content ) );
 
-    if ( $split_mode === 'paragraphs' ) {
-        $paragraphs = explode( '</p>', $content );
-        $count = count( $paragraphs );
-        $injection_point = floor( $count * ( $threshold / 100 ) );
-
-        if ( $count > 1 ) {
-            array_splice( $paragraphs, $injection_point, 0, $shortcode );
-            $content = implode( '</p>', $paragraphs );
-        }
+    if ( $inject_bottom_short && $word_count < 300 ) {
+        // Injecte en bas de l'article
+        $content .= '\n' . $shortcode;
     } else {
-        $words = explode( ' ', $content );
-        $count = count( $words );
-        $injection_point = floor( $count * ( $threshold / 100 ) );
+        if ( $split_mode === 'paragraphs' ) {
+            $paragraphs = explode( '</p>', $content );
+            $count = count( $paragraphs );
+            $injection_point = floor( $count * ( $threshold / 100 ) );
 
-        if ( $count > 1 ) {
-            array_splice( $words, $injection_point, 0, $shortcode );
-            $content = implode( ' ', $words );
+            if ( $count > 1 ) {
+                array_splice( $paragraphs, $injection_point, 0, $shortcode );
+                $content = implode( '</p>', $paragraphs );
+            }
+        } else {
+            $words = explode( ' ', $content );
+            $count = count( $words );
+            $injection_point = floor( $count * ( $threshold / 100 ) );
+
+            if ( $count > 1 ) {
+                array_splice( $words, $injection_point, 0, $shortcode );
+                $content = implode( ' ', $words );
+            }
         }
     }
-
     return $content;
 }
 
@@ -49,15 +55,24 @@ function fai_inject_form( $content ) {
 function fai_handle_submission( $contact_form ) {
     global $wpdb, $fai_mailjet_error_message;
 
-    $submission = WPCF7_Submission::get_instance();
+    $options = get_option( 'fai_settings' );
+    $target_form_id = isset( $options['fai_form_id'] ) ? absint( $options['fai_form_id'] ) : 0;
+    if ( ! $target_form_id ) {
+        return;
+    }
 
+    // Vérifie si le formulaire soumis est bien celui configuré
+    if ( method_exists( $contact_form, 'id' ) && $contact_form->id() != $target_form_id ) {
+        return;
+    }
+
+    $submission = WPCF7_Submission::get_instance();
     if ( $submission ) {
         $posted_data = $submission->get_posted_data();
         $email = isset( $posted_data['mailjetemail'] ) ? sanitize_email( $posted_data['mailjetemail'] ) : '';
         $name = isset( $posted_data['mailjetname'] ) ? sanitize_text_field( $posted_data['mailjetname'] ) : '';
 
         if ( ! empty( $email ) ) {
-            $options = get_option( 'fai_settings' );
             $api_key = isset( $options['fai_api_key'] ) ? $options['fai_api_key'] : '';
             $api_secret = isset( $options['fai_api_secret'] ) ? $options['fai_api_secret'] : '';
             $list_id = isset( $options['fai_list_id'] ) ? $options['fai_list_id'] : '';

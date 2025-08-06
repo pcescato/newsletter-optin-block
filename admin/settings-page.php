@@ -23,6 +23,7 @@ add_action( 'admin_menu', 'fai_add_admin_menu' );
  * Register the settings.
  */
 function fai_sanitize_settings( $input ) {
+    $output['fai_inject_bottom_short'] = isset($input['fai_inject_bottom_short']) ? 1 : 0;
     $output = array();
     $output['fai_activate'] = isset($input['fai_activate']) ? 1 : 0;
     $output['fai_api_key'] = isset($input['fai_api_key']) ? sanitize_text_field($input['fai_api_key']) : '';
@@ -44,6 +45,13 @@ add_action( 'admin_init', 'fai_register_settings' );
  * The HTML for the options page.
  */
 function fai_options_page_html() {
+                <tr valign="top">
+                    <th scope="row"><?php esc_html_e( 'Injecter en bas si moins de 300 mots', 'newsletter-optin-block' ); ?></th>
+                    <td>
+                        <input type="checkbox" name="fai_settings[fai_inject_bottom_short]" value="1" <?php checked( isset( $options['fai_inject_bottom_short'] ) ? $options['fai_inject_bottom_short'] : 0, 1 ); ?> />
+                        <span class="description"><?php esc_html_e( 'Si coché, le formulaire sera injecté en bas de l’article si celui-ci contient moins de 300 mots.', 'newsletter-optin-block' ); ?></span>
+                    </td>
+                </tr>
     if ( ! current_user_can( 'manage_options' ) ) {
         return;
     }

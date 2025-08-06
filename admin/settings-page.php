@@ -140,7 +140,6 @@ function fai_options_page_html() {
     }
     ?>
     <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
         <?php if ( !empty($mailjet_error) ) : ?>
             <div class="notice notice-error"><p><?php echo esc_html($mailjet_error); ?></p></div>
         <?php endif; ?>

@@ -1,4 +1,9 @@
 <?php
+// Charger les traductions au bon moment
+function fai_load_textdomain() {
+    load_plugin_textdomain( 'newsletter-optin-block', false, dirname( plugin_basename( __FILE__ ) ) . '/../languages/' );
+}
+add_action( 'init', 'fai_load_textdomain' );
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -23,8 +28,8 @@ add_action( 'admin_menu', 'fai_add_admin_menu' );
  * Register the settings.
  */
 function fai_sanitize_settings( $input ) {
-    $output['fai_inject_bottom_short'] = isset($input['fai_inject_bottom_short']) ? 1 : 0;
     $output = array();
+    $output['fai_inject_bottom_short'] = isset($input['fai_inject_bottom_short']) ? 1 : 0;
     $output['fai_activate'] = isset($input['fai_activate']) ? 1 : 0;
     $output['fai_api_key'] = isset($input['fai_api_key']) ? sanitize_text_field($input['fai_api_key']) : '';
     $output['fai_api_secret'] = isset($input['fai_api_secret']) ? sanitize_text_field($input['fai_api_secret']) : '';
@@ -32,7 +37,7 @@ function fai_sanitize_settings( $input ) {
     $output['fai_form_id'] = isset($input['fai_form_id']) ? absint($input['fai_form_id']) : '';
     $output['fai_thank_you_message'] = isset($input['fai_thank_you_message']) ? wp_kses_post($input['fai_thank_you_message']) : '';
     $output['fai_injection_threshold'] = isset($input['fai_injection_threshold']) ? min(100, max(0, intval($input['fai_injection_threshold']))) : 60;
-    $output['fai_split_mode'] = isset($input['fai_split_mode']) && in_array($input['fai_split_mode'], array('paragraphs','words')) ? $input['fai_split_mode'] : 'paragraphs';
+    $output['fai_split_mode'] = 'paragraphs';
     return $output;
 }
 
@@ -45,6 +50,52 @@ add_action( 'admin_init', 'fai_register_settings' );
  * The HTML for the options page.
  */
 function fai_options_page_html() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    $options = get_option( 'fai_settings' );
+    // Préparation pour affichage du select des listes Mailjet
+    $mailjet_lists = array();
+    $mailjet_error = '';
+    $api_key = isset($options['fai_api_key']) ? trim($options['fai_api_key']) : '';
+    $api_secret = isset($options['fai_api_secret']) ? trim($options['fai_api_secret']) : '';
+    if ( !empty($api_key) && !empty($api_secret) ) {
+        $url = 'https://api.mailjet.com/v3/REST/contactslist?limit=100';
+        $args = array(
+            'headers' => array(
+                'Authorization' => 'Basic ' . base64_encode($api_key . ':' . $api_secret),
+            ),
+            'timeout' => 10,
+        );
+        $response = wp_remote_get($url, $args);
+        if ( is_wp_error($response) ) {
+            $mailjet_error = 'Erreur Mailjet : ' . esc_html($response->get_error_message());
+        } else {
+            $code = wp_remote_retrieve_response_code($response);
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+            if ($code == 200 && isset($data['Data'])) {
+                foreach ($data['Data'] as $list) {
+                    $mailjet_lists[$list['ID']] = $list['Name'] . ' (ID: ' . $list['ID'] . ')';
+                }
+            } else {
+                $mailjet_error = 'Erreur Mailjet : ' . esc_html($code) . ' ' . (isset($data['ErrorMessage']) ? esc_html($data['ErrorMessage']) : $body);
+            }
+        }
+    }
+    ?>
+    <div class="wrap">
+        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <?php if ( !empty($mailjet_error) ) : ?>
+            <div class="notice notice-error"><p><?php echo esc_html($mailjet_error); ?></p></div>
+        <?php endif; ?>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields( 'fai_settings' );
+            do_settings_sections( 'fai_settings' );
+            ?>
+            <table class="form-table">
                 <tr valign="top">
                     <th scope="row"><?php esc_html_e( 'Injecter en bas si moins de 300 mots', 'newsletter-optin-block' ); ?></th>
                     <td>
@@ -52,6 +103,7 @@ function fai_options_page_html() {
                         <span class="description"><?php esc_html_e( 'Si coché, le formulaire sera injecté en bas de l’article si celui-ci contient moins de 300 mots.', 'newsletter-optin-block' ); ?></span>
                     </td>
                 </tr>
+                <?php
     if ( ! current_user_can( 'manage_options' ) ) {
         return;
     }
@@ -157,15 +209,6 @@ function fai_options_page_html() {
                     <th scope="row"><?php esc_html_e( 'Seuil d\'insertion (%)', 'newsletter-optin-block' ); ?></th>
                     <td>
                         <input type="number" name="fai_settings[fai_injection_threshold]" value="<?php echo esc_attr( isset( $options['fai_injection_threshold'] ) ? $options['fai_injection_threshold'] : '60' ); ?>" min="0" max="100" />
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><?php esc_html_e( 'Mode de découpage', 'newsletter-optin-block' ); ?></th>
-                    <td>
-                        <select name="fai_settings[fai_split_mode]">
-                            <option value="paragraphs" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : 'paragraphs', 'paragraphs' ); ?>><?php esc_html_e( 'Paragraphes', 'newsletter-optin-block' ); ?></option>
-                            <option value="words" <?php selected( isset( $options['fai_split_mode'] ) ? $options['fai_split_mode'] : '', 'words' ); ?>><?php esc_html_e( 'Mots', 'newsletter-optin-block' ); ?></option>
-                        </select>
                     </td>
                 </tr>
             </table>

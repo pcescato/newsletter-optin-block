@@ -133,6 +133,7 @@ function fai_handle_submission( $contact_form ) {
             }
 
             $table_name = $wpdb->prefix . 'fai_submissions';
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table insert required for plugin functionality
             $wpdb->insert(
                 $table_name,
                 array(

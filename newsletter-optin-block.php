@@ -11,6 +11,8 @@
  * Domain Path:       /languages
  */
 
+// phpcs:disable WordPress.WP.AlternativeFunctions -- Third-party vendor directory contains manually included Mailjet library, not Composer dependencies
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.

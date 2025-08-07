@@ -1,9 +1,4 @@
 <?php
-// Charger les traductions au bon moment
-function fai_load_textdomain() {
-    load_plugin_textdomain( 'newsletter-optin-block', false, dirname( plugin_basename( __FILE__ ) ) . '/../languages/' );
-}
-add_action( 'init', 'fai_load_textdomain' );
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

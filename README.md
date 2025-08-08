@@ -1,3 +1,7 @@
+[![WordPress](https://img.shields.io/badge/WordPress-CMS-21759b?logo=wordpress&logoColor=white)](https://wordpress.org)
+[![Contact Form 7](https://img.shields.io/badge/Contact%20Form%207-forms-2096df?logo=wordpress&logoColor=white)](https://contactform7.com)
+[![Mailjet](https://img.shields.io/badge/Mailjet-email-ffcc00?logo=mailjet&logoColor=1d1d1b)](https://www.mailjet.com)
+
 # Newsletter Optin Block
 
 > Injecte automatiquement un formulaire Contact Form 7 dans les articles WordPress et synchronise les abonnés avec une liste Mailjet.

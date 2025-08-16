@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load the Mailjet library via autoload.
-require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/functions_include.php';
 
 /**
  * Check if Contact Form 7 is active.

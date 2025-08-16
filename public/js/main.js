@@ -26,7 +26,7 @@ document.addEventListener( 'wpcf7mailsent', function( event ) {
 });
 
 window.addEventListener('load', function() {
-    if ( localStorage.getItem( 'newsletter_submitted' ) === 'true' ) {
+    if ( localStorage.getItem( 'newsletter_submitted' ) === '1' ) {
         var forms = document.querySelectorAll( '.wpcf7-form' );
         forms.forEach(function(form) {
             form.style.display = 'none';

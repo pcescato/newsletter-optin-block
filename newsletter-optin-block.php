@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-// Load the Mailjet library via autoload.
+// Load the Mailjet library
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/functions_include.php';
 
 /**

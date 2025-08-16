@@ -18,6 +18,11 @@ Newsletter Optin Block permet d'injecter automatiquement un formulaire Contact F
 - Gestion robuste des erreurs API
 - Fonctionne sans Composer
 
+Services externes :
+Mailjet API - Permet :
+- de récupérer les listes de diffusion Mailjet (https://api.mailjet.com/v3/REST/contactslist)
+- d'enregistrer un abonné et retourner un code réponse (https://api.mailjet.com/v3/REST/contacts)
+
 == Installation ==
 1. Téléversez le dossier du plugin dans le répertoire `/wp-content/plugins/`.
 2. Activez le plugin via le menu 'Extensions' de WordPress.

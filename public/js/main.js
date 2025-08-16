@@ -12,10 +12,10 @@ document.addEventListener( 'wpcf7mailsent', function( event ) {
     if (form) {
         form.style.display = 'none';
     }
-    if (typeof fai_vars !== 'undefined' && fai_vars.thank_you_message) {
+    if (typeof newsopbl_vars !== 'undefined' && newsopbl_vars.thank_you_message) {
         var msg = document.createElement('div');
-        msg.textContent = fai_vars.thank_you_message;
-        msg.className = 'fai-thank-you-message';
+        msg.textContent = newsopbl_vars.thank_you_message;
+        msg.className = 'newsopbl-thank-you-message';
         form.parentNode.insertBefore(msg, form.nextSibling);
         setTimeout(function() {
             if (msg && msg.parentNode) {

@@ -1,0 +1,40 @@
+# Fichiers inutiles
+tree.txt
+composer.lock
+phpbench.json
+phpcs.xml.dist
+phpstan.neon.dist
+Makefile
+*.md
+*.yml
+*.xml
+*.json
+*.dist
+
+# Répertoires inutiles
+/tests
+/docs
+/.github
+/.git
+/.gitignore
+/.idea
+/node_modules
+/vendor/*/tests
+/vendor/*/test
+/vendor/*/doc*
+vendor/*/docs
+/vendor/*/Resources/bin
+/vendor/*/vendor-bin
+/vendor/*/CI
+
+# Fichiers binaires non autorisés
+*.exe
+
+# Config CI/CD
+.github/
+.gitlab-ci.yml
+
+# Assets WP.org (à uploader séparément via SVN après validation)
+assets/banner-*.png
+assets/icon-*.png
+assets/screenshot-*.png

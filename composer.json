@@ -1,0 +1,20 @@
+{
+  "name": "newsopbl/newsletter-optin-block",
+  "description": "A WordPress plugin to add a newsletter opt-in block.",
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Pascal Cescato",
+      "email": "pascalcescato@yahoo.fr"
+    }
+  ],
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "NewsletterOptinBlock\\": "includes/"
+    }
+  }
+}

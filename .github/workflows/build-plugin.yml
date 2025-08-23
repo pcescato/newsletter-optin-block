@@ -1,0 +1,41 @@
+name: Build and Package WordPress Plugin
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Exemple : v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl
+          tools: composer, wp-cli
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist
+
+      - name: Create distribution ZIP
+        run: |
+          wp dist-archive . newsletter-optin-block.zip
+
+      - name: Upload ZIP as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: newsletter-optin-block
+          path: newsletter-optin-block.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: newsletter-optin-block.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

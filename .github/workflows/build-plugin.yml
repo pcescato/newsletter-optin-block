@@ -3,7 +3,7 @@ name: Build and Package WordPress Plugin
 on:
   push:
     tags:
-      - 'v*.*.*'  # Exemple : v1.0.0
+      - 'v*.*.*'  # Exemple : v1.0.11
 
 jobs:
   build:
@@ -18,14 +18,15 @@ jobs:
         with:
           php-version: '8.1'
           extensions: mbstring, intl
-          tools: composer, wp-cli
+          tools: composer
 
       - name: Install dependencies
         run: composer install --no-dev --prefer-dist
 
       - name: Create distribution ZIP
         run: |
-          wp dist-archive . newsletter-optin-block.zip
+          echo "📦 Création du ZIP du plugin..."
+          zip -r newsletter-optin-block.zip * -x $(cat .distignore | tr '\n' ' ')
 
       - name: Verify ZIP contents
         run: |

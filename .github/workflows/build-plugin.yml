@@ -27,6 +27,11 @@ jobs:
         run: |
           wp dist-archive . newsletter-optin-block.zip
 
+      - name: Verify ZIP contents
+        run: |
+          echo "✅ Contenu du ZIP :"
+          unzip -l newsletter-optin-block.zip
+
       - name: Upload ZIP as Artifact
         uses: actions/upload-artifact@v4
         with:

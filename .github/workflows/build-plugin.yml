@@ -28,7 +28,7 @@ jobs:
           wp dist-archive . newsletter-optin-block.zip
 
       - name: Upload ZIP as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: newsletter-optin-block
           path: newsletter-optin-block.zip

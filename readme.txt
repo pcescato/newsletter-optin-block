@@ -8,45 +8,45 @@ Stable tag: 1.0.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Injecte automatiquement un formulaire Contact Form 7 dans les articles et synchronise les abonnés avec une liste Mailjet.
+Automatically injects a Contact Form 7 form into posts and syncs subscribers with a Mailjet list.
 
 == Description ==
-Newsletter Optin Block permet d'injecter automatiquement un formulaire Contact Form 7 dans vos articles WordPress et d'ajouter les abonnés à une liste Mailjet de votre choix.
+Newsletter Optin Block allows you to automatically inject a Contact Form 7 form into your WordPress posts and add subscribers to a Mailjet list of your choice.
 
-- Sélection de la liste Mailjet dans l'admin
-- Compatible avec le repository WordPress (échappement, sanitization, etc.)
-- Gestion robuste des erreurs API
-- Fonctionne sans Composer
+- Select the Mailjet list in the admin
+- WordPress repository compatible (escaping, sanitization, etc.)
+- Robust API error handling
+- Works without Composer
 
-Services externes :
-Mailjet API - Permet :
-- de récupérer les listes de diffusion Mailjet (https://api.mailjet.com/v3/REST/contactslist)
-- d'enregistrer un abonné et retourner un code réponse (https://api.mailjet.com/v3/REST/contacts)
+External services:
+Mailjet API – allows:
+- fetching Mailjet contact lists (https://api.mailjet.com/v3/REST/contactslist)
+- adding a subscriber and returning a response code (https://api.mailjet.com/v3/REST/contacts)
 
 == Installation ==
-1. Téléversez le dossier du plugin dans le répertoire `/wp-content/plugins/`.
-2. Activez le plugin via le menu 'Extensions' de WordPress.
-3. Configurez vos clés API Mailjet et la liste cible dans Réglages > Formulaire Auto-injecté.
-4. Sélectionnez le formulaire Contact Form 7 à injecter.
+1. Upload the plugin folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Configure your Mailjet API keys and the target list in Settings > Auto-injected Form.
+4. Select the Contact Form 7 form to inject.
 
 == Frequently Asked Questions ==
-= Faut-il Contact Form 7 ? =
-Oui, ce plugin nécessite Contact Form 7.
+= Is Contact Form 7 required? =
+Yes, this plugin requires Contact Form 7.
 
-= Les abonnés sont-ils ajoutés à Mailjet ? =
-Oui, si la configuration est correcte, chaque soumission ajoute l'adresse à la liste Mailjet choisie.
+= Are subscribers added to Mailjet? =
+Yes, if configured correctly, each submission will add the address to the selected Mailjet list.
 
 == Changelog ==
 = 1.0.0 =
-* Version initiale : injection automatique, synchronisation Mailjet, configuration admin.
+* Initial release: automatic injection, Mailjet sync, admin configuration.
 
 == Upgrade Notice ==
 = 1.0.0 =
-Première version stable.
+First stable version.
 
 == Screenshots ==
-1. Réglages du plugin dans l’admin
-2. Formulaire injecté dans un article
+1. Plugin settings in the admin
+2. Form injected into a post
 
 == License ==
-Ce plugin est distribué sous la licence GPLv2 ou ultérieure.
+This plugin is distributed under the GPLv3 license.

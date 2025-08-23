@@ -1,9 +1,14 @@
 name: Build and Package WordPress Plugin
 
+# Définir explicitement les permissions pour permettre la création de releases
+permissions:
+  contents: write
+  packages: write
+
 on:
   push:
     tags:
-      - 'v*.*.*'  # Exemple : v1.0.11
+      - 'v*.*.*'  # Exemple : v1.0.13
 
 jobs:
   build:

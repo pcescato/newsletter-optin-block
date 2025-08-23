@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load the Mailjet library
-require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/functions_include.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * Check if Contact Form 7 is active.

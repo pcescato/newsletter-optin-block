@@ -1,6 +1,6 @@
 name: Build and Package WordPress Plugin
 
-# Définir explicitement les permissions pour permettre la création de releases
+# Permissions nécessaires pour créer la release
 permissions:
   contents: write
   packages: write
@@ -8,7 +8,7 @@ permissions:
 on:
   push:
     tags:
-      - 'v*.*.*'  # Exemple : v1.0.13
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -26,12 +26,14 @@ jobs:
           tools: composer
 
       - name: Install dependencies
-        run: composer install --no-dev --prefer-dist
+        run: composer install --no-dev --prefer-dist --optimize-autoloader
 
       - name: Create distribution ZIP
         run: |
           echo "📦 Création du ZIP du plugin..."
-          zip -r newsletter-optin-block.zip * -x $(cat .distignore | tr '\n' ' ')
+          # On exclut uniquement les fichiers listés dans .distignore sauf le vendor/
+          EXCLUDES=$(grep -v '^vendor/' .distignore | tr '\n' ' ')
+          zip -r newsletter-optin-block.zip * -x $EXCLUDES
 
       - name: Verify ZIP contents
         run: |

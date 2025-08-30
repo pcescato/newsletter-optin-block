@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Newsletter Optin Block
  * Description:       Injecte automatiquement un formulaire Contact Form 7 dans les articles.
- * Version:           1.0.0
+ * Version:           1.0.5
  * Author:            Pascal CESCATO
  * Plugin URI:        https://github.com/pcescato/newsletter-optin-block
  * License:           GPL-3.0+

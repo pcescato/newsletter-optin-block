@@ -1,52 +1,55 @@
 name: Build and Package WordPress Plugin
-
 # Définir explicitement les permissions pour permettre la création de releases
 permissions:
   contents: write
   packages: write
-
 on:
   push:
     tags:
       - 'v*.*.*'  # Exemple : v1.0.14
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           extensions: mbstring, intl
           tools: composer
-
       - name: Install dependencies
         run: composer install --no-dev --prefer-dist
-
       - name: Create distribution ZIP
         run: |
           echo "📦 Création du ZIP du plugin..."
-          # Crée le ZIP en excluant ce qui est listé dans .distignore
-          zip -r newsletter-optin-block.zip * -x $(cat .distignore | tr '\n' ' ')
-          # Ajoute explicitement composer.json
-          zip -ur newsletter-optin-block.zip composer.json
-
+          # Créer un répertoire temporaire avec le nom souhaité
+          mkdir -p temp/newsletter-optin-block
+          
+          # Copier tous les fichiers nécessaires dans le répertoire temporaire
+          # en excluant ce qui est listé dans .distignore
+          rsync -av --exclude-from=.distignore . temp/newsletter-optin-block/
+          
+          # S'assurer que composer.json est inclus (au cas où il serait dans .distignore)
+          cp composer.json temp/newsletter-optin-block/ 2>/dev/null || true
+          
+          # Créer le ZIP à partir du répertoire temporaire
+          cd temp
+          zip -r ../newsletter-optin-block.zip newsletter-optin-block/
+          cd ..
+          
+          # Nettoyer le répertoire temporaire
+          rm -rf temp
       - name: Verify ZIP contents
         run: |
           echo "✅ Contenu du ZIP :"
           unzip -l newsletter-optin-block.zip
-
       - name: Upload ZIP as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: newsletter-optin-block
           path: newsletter-optin-block.zip
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:

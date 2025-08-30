@@ -4,7 +4,7 @@ Tags: newsletter, mailjet, contact form 7, optin, block
 Requires at least: 6.8
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -28,6 +28,22 @@ Mailjet API – allows:
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Configure your Mailjet API keys and the target list in Settings > Auto-injected Form.
 4. Select the Contact Form 7 form to inject.
+5. Go to the Customizer and style the message:
+
+`
+.newsopbl-thank-you-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+`
 
 == Frequently Asked Questions ==
 = Is Contact Form 7 required? =
